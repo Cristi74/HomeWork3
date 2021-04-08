@@ -1,10 +1,12 @@
-package com.cristi.homework3.phones;
+package com.cristi.homework3.phones.apple;
+
+import com.cristi.homework3.phones.Phone;
 
 import java.util.LinkedList;
 
 import static java.lang.Long.parseLong;
 
-public abstract class Samsung extends Phone implements Configuration {
+public abstract class IPhone extends Phone {
     public LinkedList<String> callHistory = new LinkedList<>();
     private String[] imeiUsage = {"1", "1", "1", "1"};
     public final long imei = setImei();
@@ -33,22 +35,6 @@ public abstract class Samsung extends Phone implements Configuration {
     }
 
     @Override
-    public void removeContact() {
-
-    }
-
-    @Override
-    public void deleteMessage() {
-
-    }
-
-    @Override
-    public void makeCall(String phoneNumber) {
-        callHistory.add(phoneNumber);
-        setRemainingBattery(2);
-    }
-
-    @Override
     public void receiveCall() {
 
     }
@@ -57,5 +43,5 @@ public abstract class Samsung extends Phone implements Configuration {
     public void callsHistory() {
         System.out.println(this.callHistory);
     }
-}
 
+}

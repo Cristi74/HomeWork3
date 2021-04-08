@@ -3,10 +3,10 @@ package com.cristi.homework3.phones;
 import java.util.ArrayList;
 
 public class Phone {
-    ArrayList<Contact> contacts = new ArrayList<>();
-    boolean notExist = false;
     final int batteryLife = 100;
-    int remainingBattery = batteryLife;
+    public int remainingBattery = batteryLife;
+    ArrayList<com.cristi.homework3.phones.Contact> contacts = new ArrayList<>();
+    boolean notExist = true;
 
     public void addContact(String position, String phoneNumber, String firstName, String lastName) {
         Contact newContact = new Contact();
@@ -16,30 +16,31 @@ public class Phone {
             newContact.setContactPhoneNumber(phoneNumber);
             newContact.setContactFirstName(firstName);
             newContact.setContactLastName(lastName);
-            if (this.contacts.size() == 0)
+            if (notExist) {
                 this.contacts.add(newContact);
-            else if (!notExist)
+                notExist = false;
+            } else if (!notExist) {
                 for (Contact contact : this.contacts) {
-                    if (contact != null && contact.getContactName().equalsIgnoreCase(newContact.getContactName()) &&
-                            !contact.getContactPosition().equalsIgnoreCase(position)) {
-                        notExist = true;
-                        System.out.println("Contact exist.");
-                        return;
-                    }
+                    if (contact != null && contact.getContactName().equalsIgnoreCase(firstName + " " + lastName)) {
+                        if (contact.getContactPosition().equals(position)) {
+                            System.out.println("Contact exist");
+                            break;
+                        } else notExist = true;
+                    } else notExist = true;
                 }
-            if(notExist) this.contacts.add(newContact);
+                if (notExist) {
+                    this.contacts.add(newContact);
+                    notExist = false;
+                }
+            }
         } else System.out.println("First parameter must be a string number");
     }
 
-    public ArrayList<Contact> getContacts () {
-        return this.contacts;
-    }
-
     public void listContacts() {
-        for (Contact contact : this.contacts) {
+        for (Contact contact : contacts) {
             System.out.println(contact.getContactPosition());
             System.out.println(contact.getContactPhoneNumber());
-            System.out.println(contact.getContactName());
+            System.out.println(contact.getContactName() + "\r\n");
         }
 
     }
@@ -49,13 +50,15 @@ public class Phone {
     }
 
     public void sendMessage(String phoneNumber, String message) {
-        for (Contact contact : this.contacts) {
-            if (contact != null && contact.getContactPhoneNumber().equals(phoneNumber)) {
-                contact.messages.add(message);
-                return;
+        if (message.length() < 500) {
+            for (Contact contact : this.contacts) {
+                if (contact != null && contact.getContactPhoneNumber().equals(phoneNumber)) {
+                    contact.messages.add(message);
+                    break;
+                }
             }
-        }
-        setRemainingBattery(1);
+            setRemainingBattery(1);
+        } else System.out.println("Message is to long");
     }
 
     public void deleteMessage() {
@@ -81,15 +84,14 @@ public class Phone {
     }
 
     public void callsHistory() {
-
     }
 
     public long getImei() {
         return 0;
     }
 
-    protected int setRemainingBattery(int consumption) {
-        return this.remainingBattery = this.remainingBattery - consumption;
+    protected void setRemainingBattery(int consumption) {
+        remainingBattery = remainingBattery - consumption;
     }
 
     private boolean isNumber(String string) {
